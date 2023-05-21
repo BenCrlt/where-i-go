@@ -9,3 +9,29 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Country {
+  id                 Int                  @id @default(autoincrement())
+  CountryName        CountryName[]
+  CountryDescription CountryDescription[]
+}
+
+model CountryName {
+  id        Int     @id @default(autoincrement())
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId Int
+  name      String
+  language  String
+
+  @@unique([countryId, language])
+}
+
+model CountryDescription {
+  id          Int     @id @default(autoincrement())
+  country     Country @relation(fields: [countryId], references: [id])
+  countryId   Int
+  description String
+  language    String
+
+  @@unique([countryId, language])
+}
