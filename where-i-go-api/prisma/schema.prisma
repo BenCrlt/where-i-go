@@ -35,3 +35,34 @@ model CountryDescription {
 
   @@unique([countryId, language])
 }
+
+model Step {
+  id          Int     @id @default(autoincrement())
+  type        StepType
+  StepDescription StepDescription[]
+  StepName        StepName[]
+}
+
+model StepName {
+  id        Int     @id @default(autoincrement())
+  step      Step    @relation(fields: [stepId], references: [id])
+  stepId    Int
+  name      String
+  language  String
+
+  @@unique([stepId, language])
+}
+
+model StepDescription {
+  id          Int     @id @default(autoincrement())
+  step        Step    @relation(fields: [stepId], references: [id])
+  stepId      Int
+  description String
+  language    String
+
+  @@unique([stepId, language])
+}
+
+enum StepType {
+  CITY
+}
