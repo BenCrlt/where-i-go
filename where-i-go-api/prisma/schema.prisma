@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -37,25 +41,25 @@ model CountryDescription {
 }
 
 model Step {
-  id          Int     @id @default(autoincrement())
-  type        StepType
+  id              Int               @id @default(autoincrement())
+  type            StepType
   StepDescription StepDescription[]
   StepName        StepName[]
 }
 
 model StepName {
-  id        Int     @id @default(autoincrement())
-  step      Step    @relation(fields: [stepId], references: [id])
-  stepId    Int
-  name      String
-  language  String
+  id       Int    @id @default(autoincrement())
+  step     Step   @relation(fields: [stepId], references: [id])
+  stepId   Int
+  name     String
+  language String
 
   @@unique([stepId, language])
 }
 
 model StepDescription {
-  id          Int     @id @default(autoincrement())
-  step        Step    @relation(fields: [stepId], references: [id])
+  id          Int    @id @default(autoincrement())
+  step        Step   @relation(fields: [stepId], references: [id])
   stepId      Int
   description String
   language    String
