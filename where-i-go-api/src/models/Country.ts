@@ -6,7 +6,7 @@ builder.enumType(Language, {
   name: "Language",
 });
 
-const Country = builder.prismaObject("Country", {
+const CountryGQL = builder.prismaObject("Country", {
   fields: (t) => ({
     id: t.exposeID("id"),
     names: t.relation("CountryName"),
@@ -63,18 +63,16 @@ const CreateCountryInput = builder.inputType("CreateCountryInput", {
   }),
 });
 
-builder.mutationType({
-  fields: (t) => ({
-    createCountry: t.field({
-      type: Country,
-      args: {
-        input: t.arg({ type: CreateCountryInput, required: true }),
-      },
-      resolve: (root, { input }) =>
-        createCountry(prisma, input.language, input.name, input.description),
-    }),
-  }),
-});
+builder.mutationField("createCountry", (t) =>
+  t.field({
+    type: CountryGQL,
+    args: {
+      input: t.arg({ type: CreateCountryInput, required: true }),
+    },
+    resolve: (root, { input }) =>
+      createCountry(prisma, input.language, input.name, input.description),
+  })
+);
 
 async function createCountry(
   db: PrismaClient,
