@@ -26,6 +26,7 @@ async function getAllCountries(db: PrismaClient): Promise<Country[]> {
     include: {
       CountryName: true,
       CountryDescription: true,
+      Step: true,
     },
   });
 }
@@ -42,6 +43,7 @@ builder.queryField("country", (t) =>
         include: {
           CountryName: true,
           CountryDescription: true,
+          Step: true,
         },
       });
     },

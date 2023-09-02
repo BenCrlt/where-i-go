@@ -23,6 +23,7 @@ model Country {
   id                 String               @id @default(uuid())
   CountryName        CountryName[]
   CountryDescription CountryDescription[]
+  Step               Step[]
 }
 
 model CountryName {
@@ -50,6 +51,8 @@ model Step {
   type            StepType
   StepDescription StepDescription[]
   StepName        StepName[]
+  country         Country           @relation(fields: [countryId], references: [id])
+  countryId       String
 }
 
 model StepName {
