@@ -14,55 +14,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Language {
+  EN
+  FR
+}
+
 model Country {
-  id                 Int                  @id @default(autoincrement())
+  id                 String               @id @default(uuid())
   CountryName        CountryName[]
   CountryDescription CountryDescription[]
+  Step               Step[]
 }
 
 model CountryName {
-  id        Int     @id @default(autoincrement())
-  country   Country @relation(fields: [countryId], references: [id])
-  countryId Int
+  id        String   @id @default(uuid())
+  country   Country  @relation(fields: [countryId], references: [id])
+  countryId String
   name      String
-  language  String
+  language  Language
 
   @@unique([countryId, language])
 }
 
 model CountryDescription {
-  id          Int     @id @default(autoincrement())
-  country     Country @relation(fields: [countryId], references: [id])
-  countryId   Int
+  id          String   @id @default(uuid())
+  country     Country  @relation(fields: [countryId], references: [id])
+  countryId   String
   description String
-  language    String
+  language    Language
 
   @@unique([countryId, language])
 }
 
 model Step {
-  id              Int               @id @default(autoincrement())
+  id              String            @id @default(uuid())
   type            StepType
   StepDescription StepDescription[]
   StepName        StepName[]
+  country         Country           @relation(fields: [countryId], references: [id])
+  countryId       String
 }
 
 model StepName {
-  id       Int    @id @default(autoincrement())
-  step     Step   @relation(fields: [stepId], references: [id])
-  stepId   Int
+  id       String   @id @default(uuid())
+  step     Step     @relation(fields: [stepId], references: [id])
+  stepId   String
   name     String
-  language String
+  language Language
 
   @@unique([stepId, language])
 }
 
 model StepDescription {
-  id          Int    @id @default(autoincrement())
-  step        Step   @relation(fields: [stepId], references: [id])
-  stepId      Int
+  id          String   @id @default(uuid())
+  step        Step     @relation(fields: [stepId], references: [id])
+  stepId      String
   description String
-  language    String
+  language    Language
 
   @@unique([stepId, language])
 }
