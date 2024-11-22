@@ -11,3 +11,68 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Language {
+  EN
+  FR
+}
+
+model Country {
+  id                 String               @id @default(uuid())
+  CountryName        CountryName[]
+  CountryDescription CountryDescription[]
+  Step               Step[]
+}
+
+model CountryName {
+  id        String   @id @default(uuid())
+  country   Country  @relation(fields: [countryId], references: [id])
+  countryId String
+  name      String
+  language  Language
+
+  @@unique([countryId, language])
+}
+
+model CountryDescription {
+  id          String   @id @default(uuid())
+  country     Country  @relation(fields: [countryId], references: [id])
+  countryId   String
+  description String
+  language    Language
+
+  @@unique([countryId, language])
+}
+
+model Step {
+  id              String            @id @default(uuid())
+  type            StepType
+  StepDescription StepDescription[]
+  StepName        StepName[]
+  country         Country           @relation(fields: [countryId], references: [id])
+  countryId       String
+}
+
+model StepName {
+  id       String   @id @default(uuid())
+  step     Step     @relation(fields: [stepId], references: [id])
+  stepId   String
+  name     String
+  language Language
+
+  @@unique([stepId, language])
+}
+
+model StepDescription {
+  id          String   @id @default(uuid())
+  step        Step     @relation(fields: [stepId], references: [id])
+  stepId      String
+  description String
+  language    Language
+
+  @@unique([stepId, language])
+}
+
+enum StepType {
+  CITY
+}
